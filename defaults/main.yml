@@ -1,0 +1,21 @@
+---
+rsyslog_repeated_msg_reduction: true
+rsyslog_user: root
+rsyslog_group: adm
+rsyslog_file_create_mode: '0640'
+rsyslog_dir_create_mode: '0755'
+rsyslog_umask: '0022'
+
+rsyslog_d_default: []
+
+rsyslog_d_apps: []
+#  - type: imfile
+#    file: /var/log/apt-cacher-ng/apt-cacher.log
+#    tag: acng
+#    severity: notice
+#    facility: local3
+#  - file: /var/log/apt-cacher-ng/apt-cacher.err
+#    tag: acng
+#    severity: error
+
+rsyslog_d_remove: []

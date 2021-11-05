@@ -1,0 +1,132 @@
+# {{ ansible_managed }}
+#  /etc/rsyslog.conf  Configuration file for rsyslog.
+#
+#    For more information see
+#    /usr/share/doc/rsyslog-doc/html/rsyslog_conf.html
+#
+#  Default logging rules can be found in /etc/rsyslog.d/50-default.conf
+$PreserveFQDN on
+
+#################
+#### MODULES ####
+#################
+
+$ModLoad imuxsock # provides support for local system logging
+$ModLoad imklog   # provides kernel logging support
+#module(load="imjournal")
+#$ModLoad immark  # provides --MARK-- message capability
+module(load="imfile")     # This applies to all input text files
+
+# provides UDP syslog reception
+#$ModLoad imudp
+#$UDPServerRun 514
+
+# provides TCP syslog reception
+#$ModLoad imtcp
+#$InputTCPServerRun 514
+
+{% if ansible_distribution == 'Ubuntu' %}
+# Enable non-kernel facility klog messages
+$KLogPermitNonKernelFacility on
+{% endif %}
+
+###########################
+#### GLOBAL DIRECTIVES ####
+###########################
+
+#
+# Set max message size for sending and receiving
+#
+$MaxMessageSize 64k
+$RepeatedMsgReduction on    # do not log repeated messages
+
+#
+# Set rate limit for messages received.
+# 
+# Disable rate-limiting of syslog
+$SystemLogRateLimitInterval 0
+$SystemLogRateLimitBurst 0
+
+# Disable rate-limiting of journal messages
+#$imjournalRatelimitInterval 0
+#$imjournalRatelimitBurst 0
+
+#$SystemLogRateLimitInterval 1
+#$SystemLogRateLimitBurst 100
+
+#
+# Use traditional timestamp format.
+# To enable high precision timestamps, comment out the following line.
+#
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+
+# Disable escaping of control characters (like the ones used by Data::Dumper)
+$EscapeControlCharactersOnReceive off
+
+
+#
+# Set the default permissions for all log files.
+#
+$FileOwner {{ rsyslog_user | default(root) }}
+$FileGroup {{ rsyslog_group | default(adm) }}
+$FileCreateMode {{ rsyslog_file_create_mode | default('0640') }}
+$DirOwner {{ rsyslog_user | default(root) }}
+$DirGroup {{ rsyslog_group | default(adm) }}
+$DirCreateMode {{ rsyslog_dir_create_mode | default('0755') }}
+$PrivDropToUser root
+$PrivDropToGroup root
+
+$Umask {{ rsyslog_umask | default('0022') }}
+{% if ansible_distribution == 'Ubuntu' %}
+$PrivDropToUser {{ rsyslog_priv_drop_to_user | default(rsyslog_user) }}
+$PrivDropToGroup {{ rsyslog_priv_drop_to_group | default(rsyslog_user) }}
+{% endif %}
+#
+# Where to place spool and state files
+#
+$WorkDirectory /var/spool/rsyslog
+
+#
+# Include all config files in /etc/rsyslog.d/
+#
+$IncludeConfig /etc/rsyslog.d/*.conf
+
+
+###############
+#### RULES ####
+###############
+
+#
+# First some standard log files.  Log by facility.
+#
+auth,authpriv.*				/var/log/auth.log
+*.*;auth,authpriv,mail.none,local3.none,local4.none		-/var/log/syslog
+cron.*						/var/log/cron.log
+daemon.*					-/var/log/daemon.log
+kern.*						-/var/log/kern.log
+lpr.*						-/var/log/lpr.log
+user.*						-/var/log/user.log
+mail.*          		   	-/var/log/mail.log
+mail.warn       		   	/var/log/mail.err
+local4.*                    -/var/log/slapd.log
+
+#
+# Some "catch-all" log files.
+#
+*.=debug;\
+	auth,authpriv.none;\
+	news.none;mail.none	-/var/log/debug
+*.=info;*.=notice;*.=warn;\
+	auth,authpriv.none;\
+	cron,daemon.none;\
+	local3.none;\
+	local4.none;\
+	mail,news.none		-/var/log/messages
+
+
+#
+# Emergencies are sent to everybody logged in.
+#
+*.emerg	:omusrmsg:*
+
+

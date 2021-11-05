@@ -1,0 +1,13 @@
+---
+rsyslog_d_default:
+  - 10-ignore-systemd-gpg.conf
+  - 10-ignore-systemd-session-slice.conf
+  - 10-ignore-sshd-deprecated-option.conf
+  - 10-ignore-bash-completion-error.conf
+  - 20-snoopy.conf
+  - 20-apt.conf
+  - 20-sssd.conf
+  - 20-dnsmasq.conf
+  - 20-ipaclient.conf
+  - 20-ufw.conf
+  - 90-client.conf
