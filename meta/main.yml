@@ -15,12 +15,12 @@ galaxy_info:
       versions:
         - "bullseye"
         - "buster"
+        - "stretch"
     - name: "RedHat"
       versions:
         - "Maipo"
     - name: "CentOS"
       versions:
-        - "8"
         - "7"
     - name: "Rocky"
       versions:
