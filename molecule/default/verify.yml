@@ -64,11 +64,6 @@
       changed_when: false
       become: false
 
-    - name: debug
-      debug:
-        msg: "{{ test_files.files }}"
-        verbosity: 3
-
     - name: Copy Goss tests to remote
       copy:
         src: "{{ item.path }}"
