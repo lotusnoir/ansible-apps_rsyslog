@@ -8,21 +8,21 @@
 - name: "Install tasks"
   when: not rsyslog_install.stat.exists
   block:
-    - name: "DEBIAN - Install rsyslog package"
+    - name: "DEBIAN: Install rsyslog package"
       ansible.builtin.package:
         name: rsyslog
         state: present
       when: ansible_os_family == 'Debian'
 
-    - name: "Add repository"
+    - name: "REDHAT: Add repository"
       ansible.builtin.yum_repository:
         name: rsyslog
         description: EPEL YUM repo
         baseurl: "http://rpms.adiscon.com/v8-stable/rsyslog-rhel{{ ansible_distribution_major_version }}.repo"
       when: ansible_distribution == 'RedHat'
 
-    - name: "REDHAT - Install rsyslog package"
-      ansible.builtin.dnf:
+    - name: "REDHAT: Install rsyslog package"
+      ansible.builtin.yum:
         name: rsyslog
         state: present
       when: ansible_os_family == 'RedHat' or ansible_os_family == 'Rocky'
