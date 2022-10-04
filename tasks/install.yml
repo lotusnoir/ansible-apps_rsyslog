@@ -1,7 +1,7 @@
 ---
 - name: "Check for rsyslog dir"
   ansible.builtin.stat:
-    path: "/var/spool/rsyslog"
+    path: "{{ rsyslog_working_dir }}"
   changed_when: false
   register: rsyslog_install
 
@@ -27,9 +27,9 @@
         state: present
       when: ansible_os_family == 'RedHat' or ansible_os_family == 'Rocky'
 
-    - name: "Create /var/spool/rsyslog"
+    - name: "Create {{ rsyslog_working_dir }}"
       ansible.builtin.file:
-        path: /var/spool/rsyslog
+        path: "{{ rsyslog_working_dir }}"
         owner: "{{ rsyslog_user }}"
         group: "{{ rsyslog_group }}"
         mode: 0755
