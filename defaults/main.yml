@@ -8,14 +8,17 @@ rsyslog_file_create_mode: '0640'
 rsyslog_dir_create_mode: '0755'
 rsyslog_umask: '0022'
 
-#Forward vars to log server
-rsyslog_target_server: rsyslog-server-vip.exemple.com
-rsyslog_target_port: 514
-rsyslog_target_proto: udp
+#Forward configuration
+rsyslog_d_forward: []
+#  - name: fwd_default
+#    server: rsyslog-server-vip.exemple.com
+#    port: 514
+#    proto: udp
+#    template: '"%TIMESTAMP:::date-rfc3339% %hostname% %syslogpriority-text% %syslogfacility-text% %programname% %msg:::sp-if-no-1st-sp%%msg:::drop-last-lf%"'
 
-#Extra conf rsyslog.d
-#include existing files from project/files
+#include existing files in template starting from 10 and 20
 rsyslog_d_default: []
+
 #Read specific log file
 rsyslog_d_apps: []
 #  - type: imfile

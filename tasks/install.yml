@@ -61,7 +61,17 @@
   with_items: "{{ rsyslog_d_default }}"
   notify: restart rsyslog
 
-- name: "Add specific configuration files"
+- name: "Add forward configuration files"
+  ansible.builtin.template:
+    src: "forward.conf.j2"
+    dest: "/etc/rsyslog.d/90-forward.conf"
+    owner: "{{ rsyslog_user }}"
+    group: "{{ rsyslog_group }}"
+    mode: 0640
+  with_items: "{{ rsyslog_d_forward }}"
+  notify: restart rsyslog
+
+- name: "Add application configuration files"
   ansible.builtin.template:
     src: "applications.conf.j2"
     dest: "/etc/rsyslog.d/40-apps.conf"

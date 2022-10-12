@@ -8,4 +8,3 @@ rsyslog_d_default:
   - 20-sssd.conf
   - 20-ipaclient.conf
   - 20-ufw.conf
-  - 90-forward.conf
