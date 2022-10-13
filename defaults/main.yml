@@ -7,6 +7,7 @@ rsyslog_group: adm
 rsyslog_file_create_mode: '0640'
 rsyslog_dir_create_mode: '0755'
 rsyslog_umask: '0022'
+rsyslog_TraditionalFileFormat: false
 
 #Forward configuration
 rsyslog_d_forward: []

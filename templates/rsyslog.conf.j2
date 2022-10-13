@@ -57,8 +57,9 @@ $SystemLogRateLimitBurst 0
 #
 # Use traditional timestamp format.
 # To enable high precision timestamps, comment out the following line.
-#
+{% if rsyslog_TraditionalFileFormat %}
 $ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+{% endif %}
 
 # Disable escaping of control characters (like the ones used by Data::Dumper)
 $EscapeControlCharactersOnReceive off
