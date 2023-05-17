@@ -1,13 +1,30 @@
 ---
-#global conf
-rsyslog_working_dir: "/var/spool/rsyslog"
-rsyslog_repeated_msg_reduction: true
 rsyslog_user: root
 rsyslog_group: adm
-rsyslog_file_create_mode: '0640'
-rsyslog_dir_create_mode: '0755'
-rsyslog_umask: '0022'
-rsyslog_TraditionalFileFormat: false
+
+#Main rsyslog.conf
+rsyslog_working_dir: "/var/spool/rsyslog"
+rsyslog_modules_conf: |
+  module(load="imuxsock")
+  module(load="imklog" permitnonkernelfacility="on")
+  module(load="imfile")
+rsyslog_global_conf: |
+  $ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+  $RepeatedMsgReduction on
+  $FileOwner root
+  $FileGroup root
+  $FileCreateMode 0640
+  $DirCreateMode 0755
+  $Umask 0022
+  $PrivDropToUser root
+  $PrivDropToGroup root
+rsyslog_rules_conf: |
+  auth,authpriv.*         /var/log/auth.log
+  *.*;auth,authpriv.none  -/var/log/syslog
+  kern.*                  -/var/log/kern.log
+  mail.*                  -/var/log/mail.log
+  mail.err                /var/log/mail.err
+  *.emerg                 :omusrmsg:*
 
 #Forward configuration
 rsyslog_d_forward: []

@@ -1,142 +1,31 @@
 # {{ ansible_managed }}
-#  /etc/rsyslog.conf  Configuration file for rsyslog.
+# /etc/rsyslog.conf configuration file for rsyslog
 #
-#    For more information see
-#    /usr/share/doc/rsyslog-doc/html/rsyslog_conf.html
+# For more information install rsyslog-doc and see
+# /usr/share/doc/rsyslog-doc/html/configuration/index.html
 #
-#  Default logging rules can be found in /etc/rsyslog.d/50-default.conf
-$PreserveFQDN on
 
 #################
 #### MODULES ####
 #################
-
-$ModLoad imuxsock # provides support for local system logging
-$ModLoad imklog   # provides kernel logging support
-#module(load="imjournal")
-#$ModLoad immark  # provides --MARK-- message capability
-module(load="imfile")     # This applies to all input text files
-
-# provides UDP syslog reception
-#$ModLoad imudp
-#$UDPServerRun 514
-
-# provides TCP syslog reception
-#$ModLoad imtcp
-#$InputTCPServerRun 514
-
-{% if ansible_distribution == 'Ubuntu' %}
-# Enable non-kernel facility klog messages
-$KLogPermitNonKernelFacility on
-{% endif %}
+{{ rsyslog_modules_conf }}
 
 ###########################
 #### GLOBAL DIRECTIVES ####
 ###########################
+{{ rsyslog_global_conf }}
 
-#
-# Set max message size for sending and receiving
-#
-$MaxMessageSize 64k
-$RepeatedMsgReduction on    # do not log repeated messages
+###############
+#### RULES ####
+###############
+{{ rsyslog_rules_conf }}
 
-#
-# Set rate limit for messages received.
-# 
-# Disable rate-limiting of syslog
-$SystemLogRateLimitInterval 0
-$SystemLogRateLimitBurst 0
-
-# Disable rate-limiting of journal messages
-#$imjournalRatelimitInterval 0
-#$imjournalRatelimitBurst 0
-
-#$SystemLogRateLimitInterval 1
-#$SystemLogRateLimitBurst 100
-
-#
-# Use traditional timestamp format.
-# To enable high precision timestamps, comment out the following line.
-{% if rsyslog_TraditionalFileFormat %}
-$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
-{% endif %}
-
-# Disable escaping of control characters (like the ones used by Data::Dumper)
-$EscapeControlCharactersOnReceive off
-
-
-#
-# Set the default permissions for all log files.
-#
-$FileOwner {{ rsyslog_user | default(root) }}
-$FileGroup {{ rsyslog_group | default(adm) }}
-$FileCreateMode {{ rsyslog_file_create_mode | default('0640') }}
-$DirOwner {{ rsyslog_user | default(root) }}
-$DirGroup {{ rsyslog_group | default(adm) }}
-$DirCreateMode {{ rsyslog_dir_create_mode | default('0755') }}
-$PrivDropToUser root
-$PrivDropToGroup root
-
-$Umask {{ rsyslog_umask | default('0022') }}
-{% if ansible_distribution == 'Ubuntu' %}
-$PrivDropToUser {{ rsyslog_priv_drop_to_user | default(rsyslog_user) }}
-$PrivDropToGroup {{ rsyslog_priv_drop_to_group | default(rsyslog_user) }}
-{% endif %}
 #
 # Where to place spool and state files
 #
 $WorkDirectory {{ rsyslog_working_dir }}
-$ActionQueueFileName fwdRule1 # unique name prefix for spool files
-$ActionQueueMaxDiskSpace 1g   # 1gb space limit (use as much as possible)
-$ActionQueueSaveOnShutdown on # save messages to disk on shutdown
-$ActionQueueType LinkedList   # run asynchronously
-$ActionResumeRetryCount -1    # infinite retries if host is down
 
 #
 # Include all config files in /etc/rsyslog.d/
 #
 $IncludeConfig /etc/rsyslog.d/*.conf
-
-
-###############
-#### RULES ####
-###############
-
-auth,authpriv.*				/var/log/secure
-
-*.=warning;*.=err           -/var/log/warn
-*.crit                      /var/log/warn
-*.*;mail.none;news.none     -/var/log/syslog
-cron.*						/var/log/cron.log
-daemon.*					-/var/log/daemon.log
-kern.*						-/var/log/kern.log
-mail.*          		   	-/var/log/mail.log
-mail.info          		   	-/var/log/mail.info
-mail.warning       		   	-/var/log/mail.warn
-mail.err        		   	/var/log/mail.err
-news.crit                   -/var/log/news/news.crit 
-news.err                    -/var/log/news/news.err
-news.notice                 -/var/log/news/news.notice
-local0,local1.*             -/var/log/localmessages
-local2,local3.*             -/var/log/localmessages
-local4,local5.*             -/var/log/localmessages
-local6,local7.*             -/var/log/localmessages
-
-##
-## Some "catch-all" log files.
-##
-#*.=debug;\
-#	auth,authpriv.none;\
-#	news.none;mail.none	-/var/log/debug
-#*.=info;*.=notice;*.=warn;\
-#	auth,authpriv.none;\
-#	cron,daemon.none;\
-#	mail,news.none		-/var/log/messages
-
-
-#
-# Emergencies are sent to everybody logged in.
-#
-*.emerg	:omusrmsg:*
-
-
