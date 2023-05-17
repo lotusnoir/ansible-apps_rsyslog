@@ -13,7 +13,7 @@ rsyslog_global_conf: |
   $RepeatedMsgReduction on
   $FileOwner root
   $FileGroup root
-  $FileCreateMode 0640
+  $FileCreateMode 0600
   $DirCreateMode 0755
   $Umask 0022
   $PrivDropToUser root
