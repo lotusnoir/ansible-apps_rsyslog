@@ -9,16 +9,8 @@ $template {{ item.name }}, {{ item.template }}
 {% if item.template is defined %}
         template="{{ item.name }}"
 {% endif %}
-        queue.filename="omfwd_queue"
-	queue.spoolDirectory="/var/lib/rsyslog"
-        queue.size="300000"
-	queue.maxdiskspace="536870912"
-        queue.lowwatermark="20000"
-	queue.highwatermark="200000"
-        queue.discardmark="250000"
-	queue.type="LinkedList"
-        queue.discardseverity="4"
-        queue.saveonshutdown="on"
-	queue.dequeuebatchsize="4"
+{% for option in item.options %}
+        {{ option }}
+{% endfor %}
 )
 {% endfor %}

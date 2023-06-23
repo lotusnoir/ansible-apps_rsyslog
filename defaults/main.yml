@@ -33,6 +33,18 @@ rsyslog_d_forward: []
 #    port: 514
 #    proto: udp
 #    template: '"%TIMESTAMP:::date-rfc3339% %hostname% %syslogpriority-text% %syslogfacility-text% %programname% %msg:::sp-if-no-1st-sp%%msg:::drop-last-lf%"'
+#    options:
+#      - queue.filename="omfwd_queue"
+#      - queue.type="LinkedList"
+#      - queue.spoolDirectory="/var/lib/rsyslog"
+#      - queue.size="300000"
+#      - queue.maxdiskspace="536870912"
+#      - queue.lowwatermark="20000"
+#      - queue.highwatermark="200000"
+#      - queue.discardmark="250000"
+#      - queue.discardseverity="4"
+#      - queue.saveonshutdown="on"
+#      - queue.dequeuebatchsize="4"
 
 #include existing files in template starting from 10 and 20
 rsyslog_d_default: []
