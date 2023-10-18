@@ -52,22 +52,52 @@ rsyslog_d_default: []
 #  - 10-ignore-systemd-session-slice.conf
 #  - 10-ignore-sshd-deprecated-option.conf
 #  - 10-ignore-bash-completion-error.conf
-#  - 20-snoopy.conf
-#  - 20-apt.conf
-#  - 20-sssd.conf
-#  - 20-dnsmasq.conf
-#  - 20-ipaclient.conf
-#  - 20-ufw.conf
+
 ##Read specific log file
-rsyslog_d_apps: []
-#  - type: imfile
-#    file: /var/log/apt-cacher-ng/apt-cacher.log
-#    tag: acng
-#    severity: notice
-#    facility: local3
-#  - file: /var/log/apt-cacher-ng/apt-cacher.err
-#    tag: acng
-#    severity: error
+rsyslog_d_custom: []
+#  - name: 20-snoopy
+#    content: |
+#      if ($programname startswith "snoopy") then {
+#        action(type="omfile" fileOwner="root" fileGroup="root" fileCreateMode="0600" file="/var/log/snoopy.log")
+#        stop
+#      }
+#  - name: 20-apt
+#    content: |
+#      input(type="imfile"
+#        File="/var/log/apt/history.log"
+#        Tag="apt"
+#        Severity="notice"
+#        Facility="local3"
+#      )
+#      input(type="imfile"
+#        File="/var/log/apt/term.log"
+#        Tag="apt"
+#        Severity="notice"
+#        Facility="local3"
+#      )
+#  - name: 20-ipaclient
+#    content: |
+#      input(type="imfile"
+#        File="/var/log/ipaclient-install.log"
+#        Tag="ipaclient"
+#        Severity="notice"
+#        Facility="local3"
+#      )
+#  - name: 20-sssd
+#    content: |
+#      input(type="imfile"
+#        File="/var/log/sssd/*.log"
+#        Tag="sssd"
+#        Severity="notice"
+#        Facility="local3"
+#      )
+#  - name: 20-ufw
+#    content: |
+#      if not ($msg contains "logstash.dissect.Dissector") and $msg contains "[UFW " then /var/log/ufw.log
+#  - name: 20-cloudinit
+#    content: |
+#      :syslogtag, isequal, "[CLOUDINIT]" /var/log/cloud-init.log
+#      & stop
 
 #Remove installed conf
 rsyslog_d_remove: []

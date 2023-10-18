@@ -8,12 +8,6 @@
 - name: "Install tasks"
   when: not rsyslog_install.stat.exists
   block:
-    - name: "DEBIAN: Install rsyslog package"
-      ansible.builtin.package:
-        name: rsyslog
-        state: present
-      when: ansible_os_family == 'Debian'
-
     - name: "REDHAT: Add repository"
       ansible.builtin.yum_repository:
         name: rsyslog
@@ -22,10 +16,9 @@
       when: ansible_distribution == 'RedHat'
 
     - name: "REDHAT: Install rsyslog package"
-      ansible.builtin.yum:
+      ansible.builtin.package:
         name: rsyslog
         state: present
-      when: ansible_os_family == 'RedHat' or ansible_os_family == 'Rocky'
 
     - name: "Create {{ rsyslog_working_dir }}"
       ansible.builtin.file:
@@ -58,6 +51,8 @@
     owner: "{{ rsyslog_user }}"
     group: "{{ rsyslog_group }}"
     mode: 0640
+  when:
+    - rsyslog_d_default is defined and rsyslog_d_default | length > 0
   with_items: "{{ rsyslog_d_default }}"
   notify: restart rsyslog
 
@@ -68,22 +63,28 @@
     owner: "{{ rsyslog_user }}"
     group: "{{ rsyslog_group }}"
     mode: 0640
+  when:
+    - rsyslog_d_forward is defined and rsyslog_d_forward | length > 0
   with_items: "{{ rsyslog_d_forward }}"
   notify: restart rsyslog
 
-- name: "Add application configuration files"
+- name: "Add custom configuration files"
   ansible.builtin.template:
-    src: "applications.conf.j2"
-    dest: "/etc/rsyslog.d/40-apps.conf"
+    src: "custom.conf.j2"
+    dest: "/etc/rsyslog.d/{{  item.name }}.conf"
     owner: "{{ rsyslog_user }}"
     group: "{{ rsyslog_group }}"
     mode: 0640
-  with_items: "{{ rsyslog_d_apps }}"
+  when:
+    - rsyslog_d_custom is defined and rsyslog_d_custom | length > 0
+  with_items: "{{ rsyslog_d_custom }}"
   notify: restart rsyslog
 
 - name: "Remove configurations"
   ansible.builtin.file:
     dest: "/etc/rsyslog.d/{{ item }}"
     state: absent
+  when:
+    - rsyslog_d_remove is defined and rsyslog_d_remove | length > 0
   with_items: "{{ rsyslog_d_remove }}"
   notify: restart rsyslog
