@@ -19,6 +19,10 @@
       ansible.builtin.package:
         name: rsyslog
         state: present
+      register: pkg_result
+      retries: 12
+      delay: 10
+      until: pkg_result is success
 
     - name: "Create {{ rsyslog_working_dir }}"
       ansible.builtin.file:
