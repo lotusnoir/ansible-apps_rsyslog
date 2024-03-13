@@ -46,7 +46,7 @@
     owner: "{{ rsyslog_user }}"
     group: "{{ rsyslog_group }}"
     mode: 0640
-  notify: restart rsyslog
+  notify: Restart rsyslog
 
 - name: "Add defaults configuration files"
   ansible.builtin.template:
@@ -58,7 +58,7 @@
   when:
     - rsyslog_d_default is defined and rsyslog_d_default | length > 0
   with_items: "{{ rsyslog_d_default }}"
-  notify: restart rsyslog
+  notify: Restart rsyslog
 
 - name: "Add forward configuration files"
   ansible.builtin.template:
@@ -70,7 +70,7 @@
   when:
     - rsyslog_d_forward is defined and rsyslog_d_forward | length > 0
   with_items: "{{ rsyslog_d_forward }}"
-  notify: restart rsyslog
+  notify: Restart rsyslog
 
 - name: "Add custom configuration files"
   ansible.builtin.template:
@@ -82,7 +82,7 @@
   when:
     - rsyslog_d_custom is defined and rsyslog_d_custom | length > 0
   with_items: "{{ rsyslog_d_custom }}"
-  notify: restart rsyslog
+  notify: Restart rsyslog
 
 - name: "Remove configurations"
   ansible.builtin.file:
@@ -91,4 +91,4 @@
   when:
     - rsyslog_d_remove is defined and rsyslog_d_remove | length > 0
   with_items: "{{ rsyslog_d_remove }}"
-  notify: restart rsyslog
+  notify: Restart rsyslog
