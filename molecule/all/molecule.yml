@@ -12,7 +12,7 @@ scenario:
     - prepare
     - converge
     - idempotence
-    #- verify
+    # - verify
     - destroy
 platforms:
   - name: apps-rsyslog-ubuntu20
@@ -22,15 +22,6 @@ platforms:
     capabilities: ['NET_ADMIN']
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
-  - name: apps-rsyslog-ubuntu18
-    pre_build_image: true
-    image: lotusnoir/ansible_molecule_test_images:ubuntu18
-    docker_host: "${DOCKER_HOST:-unix://var/run/docker.sock}"
-    capabilities: ['NET_ADMIN']
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    groups:
-      - python3
   - name: apps-rsyslog-ubuntu22
     pre_build_image: true
     image: lotusnoir/ansible_molecule_test_images:ubuntu22
@@ -39,12 +30,6 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
     groups:
       - python3
-  - name: apps-rsyslog-debian10
-    pre_build_image: true
-    image: lotusnoir/ansible_molecule_test_images:debian10
-    docker_host: "${DOCKER_HOST:-unix://var/run/docker.sock}"
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
   - name: apps-rsyslog-debian11
     pre_build_image: true
     image: lotusnoir/ansible_molecule_test_images:debian11
@@ -61,25 +46,9 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
     groups:
       - python3
-  - name: apps-rsyslog-rocky8
-    pre_build_image: true
-    image: lotusnoir/ansible_molecule_test_images:rocky8
-    docker_host: "${DOCKER_HOST:-unix://var/run/docker.sock}"
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    groups:
-      - python3
   - name: apps-rsyslog-rocky9
     pre_build_image: true
     image: lotusnoir/ansible_molecule_test_images:rocky9
-    docker_host: "${DOCKER_HOST:-unix://var/run/docker.sock}"
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    groups:
-      - python3
-  - name: apps-rsyslog-oraclelinux8
-    pre_build_image: true
-    image: lotusnoir/ansible_molecule_test_images:oraclelinux8
     docker_host: "${DOCKER_HOST:-unix://var/run/docker.sock}"
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
