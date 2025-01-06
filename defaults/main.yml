@@ -52,6 +52,7 @@ rsyslog_d_default: []
 #  - 10-ignore-systemd-session-slice.conf
 #  - 10-ignore-sshd-deprecated-option.conf
 #  - 10-ignore-bash-completion-error.conf
+#  - 10-ignore-ufw_ack.conf
 
 ##Read specific log file
 rsyslog_d_custom: []
