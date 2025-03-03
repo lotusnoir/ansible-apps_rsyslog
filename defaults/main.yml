@@ -2,12 +2,14 @@
 rsyslog_user: root
 rsyslog_group: adm
 
-#Main rsyslog.conf
+# Main rsyslog.conf
 rsyslog_working_dir: "/var/spool/rsyslog"
+
 rsyslog_modules_conf: |
   module(load="imuxsock")
   module(load="imklog" permitnonkernelfacility="on")
   module(load="imfile")
+
 rsyslog_global_conf: |
   $ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
   $RepeatedMsgReduction on
@@ -18,6 +20,9 @@ rsyslog_global_conf: |
   $Umask 0022
   $PrivDropToUser root
   $PrivDropToGroup root
+  $WorkDirectory {{ rsyslog_working_dir }}
+  $IncludeConfig /etc/rsyslog.d/*.conf
+
 rsyslog_rules_conf: |
   auth,authpriv.*         /var/log/auth.log
   *.*;auth,authpriv.none  -/var/log/syslog
@@ -26,7 +31,7 @@ rsyslog_rules_conf: |
   mail.err                /var/log/mail.err
   *.emerg                 :omusrmsg:*
 
-#Forward configuration
+# Forward configuration
 rsyslog_d_forward: []
 #  - name: fwd_default
 #    server: rsyslog-server-vip.exemple.com
@@ -46,7 +51,7 @@ rsyslog_d_forward: []
 #      - queue.saveonshutdown="on"
 #      - queue.dequeuebatchsize="4"
 
-#include existing files in template starting from 10 and 20
+# Include existing files in template starting from 10 and 20
 rsyslog_d_default: []
 #  - 10-ignore-systemd-gpg.conf
 #  - 10-ignore-systemd-session-slice.conf
@@ -54,7 +59,7 @@ rsyslog_d_default: []
 #  - 10-ignore-bash-completion-error.conf
 #  - 10-ignore-ufw_ack.conf
 
-##Read specific log file
+# Read specific log file
 rsyslog_d_custom: []
 #  - name: 20-snoopy
 #    content: |
@@ -100,5 +105,5 @@ rsyslog_d_custom: []
 #      :syslogtag, isequal, "[CLOUDINIT]" /var/log/cloud-init.log
 #      & stop
 
-#Remove installed conf
+# Remove installed conf
 rsyslog_d_remove: []

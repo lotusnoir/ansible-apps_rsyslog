@@ -14,13 +14,3 @@
 #### RULES ####
 ###############
 {{ rsyslog_rules_conf }}
-
-#
-# Where to place spool and state files
-#
-$WorkDirectory {{ rsyslog_working_dir }}
-
-#
-# Include all config files in /etc/rsyslog.d/
-#
-$IncludeConfig /etc/rsyslog.d/*.conf
