@@ -33,7 +33,7 @@
         path: "{{ rsyslog_working_dir }}"
         owner: "{{ rsyslog_user }}"
         group: "{{ rsyslog_group }}"
-        mode: '0755'
+        mode: "0755"
         state: directory
 
     - name: "Start and enable service"
@@ -49,31 +49,7 @@
     dest: /etc/rsyslog.conf
     owner: "{{ rsyslog_user }}"
     group: "{{ rsyslog_group }}"
-    mode: '0640'
-  notify: Restart rsyslog
-
-- name: "Add defaults configuration files"
-  ansible.builtin.template:
-    src: "{{ item }}"
-    dest: "/etc/rsyslog.d/{{ item }}"
-    owner: "{{ rsyslog_user }}"
-    group: "{{ rsyslog_group }}"
-    mode: '0640'
-  when:
-    - rsyslog_d_default is defined and rsyslog_d_default | length > 0
-  with_items: "{{ rsyslog_d_default }}"
-  notify: Restart rsyslog
-
-- name: "Add forward configuration files"
-  ansible.builtin.template:
-    src: "forward.conf.j2"
-    dest: "/etc/rsyslog.d/90-forward.conf"
-    owner: "{{ rsyslog_user }}"
-    group: "{{ rsyslog_group }}"
-    mode: '0640'
-  when:
-    - rsyslog_d_forward is defined and rsyslog_d_forward | length > 0
-  with_items: "{{ rsyslog_d_forward }}"
+    mode: "0640"
   notify: Restart rsyslog
 
 - name: "Add custom configuration files"
@@ -82,7 +58,7 @@
     dest: "/etc/rsyslog.d/{{  item.name }}.conf"
     owner: "{{ rsyslog_user }}"
     group: "{{ rsyslog_group }}"
-    mode: '0640'
+    mode: "0640"
   when:
     - rsyslog_d_custom is defined and rsyslog_d_custom | length > 0
   with_items: "{{ rsyslog_d_custom }}"

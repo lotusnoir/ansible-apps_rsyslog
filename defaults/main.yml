@@ -33,34 +33,48 @@ rsyslog_rules_conf: |
 
 # Forward configuration
 rsyslog_d_forward: []
-#  - name: fwd_default
-#    server: rsyslog-server-vip.exemple.com
-#    port: 514
-#    proto: udp
-#    template: '"%TIMESTAMP:::date-rfc3339% %hostname% %syslogpriority-text% %syslogfacility-text% %programname% %msg:::sp-if-no-1st-sp%%msg:::drop-last-lf%"'
-#    options:
-#      - queue.filename="omfwd_queue"
-#      - queue.type="LinkedList"
-#      - queue.spoolDirectory="/var/lib/rsyslog"
-#      - queue.size="300000"
-#      - queue.maxdiskspace="536870912"
-#      - queue.lowwatermark="20000"
-#      - queue.highwatermark="200000"
-#      - queue.discardmark="250000"
-#      - queue.discardseverity="4"
-#      - queue.saveonshutdown="on"
-#      - queue.dequeuebatchsize="4"
-
-# Include existing files in template starting from 10 and 20
-rsyslog_d_default: []
-#  - 10-ignore-systemd-gpg.conf
-#  - 10-ignore-systemd-session-slice.conf
-#  - 10-ignore-sshd-deprecated-option.conf
-#  - 10-ignore-bash-completion-error.conf
-#  - 10-ignore-ufw_ack.conf
-
-# Read specific log file
+# Create specific log file
 rsyslog_d_custom: []
+#  - name: 10-ignore-systemd-gpg.conf
+#    content: |
+#      if ($programname == "systemd") and ($msg contains "Listening on GnuPG" or $msg contains "Closed GnuPG") then stop
+#  - name: 10-ignore-systemd-session-slice.conf
+#    content: |
+#      if ($programname == "systemd") and ($msg contains "Created slice User Slice of ") then stop
+#      if ($programname == "systemd") and ($msg contains "Started Session ") then stop
+#      if ($programname == "systemd") and ($msg contains "Reached target ") then stop
+#      if ($programname == "systemd") and ($msg contains "Started User Manager for UID ") then stop
+#      if ($programname == "systemd") and ($msg contains "Stopping User Manager for UID ") then stop
+#      if ($programname == "systemd") and ($msg contains "Stopped target ") then stop
+#      if ($programname == "systemd") and ($msg contains "Reached target Shutdown") then stop
+#      if ($programname == "systemd") and ($msg contains "Starting Exit the Session.") then stop
+#      if ($programname == "systemd") and ($msg contains "Removed slice User Slice of ") then stop
+#  - name: 10-ignore-sshd-deprecated-option.conf
+#    content: |
+#      if ($programname == "sshd") and ($msg contains "Deprecated option ") then stop
+#  - name: 10-ignore-bash-completion-error.conf
+#    content: |
+#      if $programname == "nslcd" and ($msg contains "request denied by validnames option") then stop
+#  - name: 10-ignore-ufw_ack.conf
+#    content: |
+#      if $programname == "kernel" and ($msg contains "[UFW BLOCK]" and $msg contains "ACK FIN URGP=0") then stop
+#
+#  - name: 15-forward
+#    content: |
+#      *.* action(type="omfwd" Target="127.0.0.1" Port="5140" Protocol="udp"
+#          queue.filename="omfwd_queue"
+#          queue.spoolDirectory="/var/lib/rsyslog"
+#          queue.size="300000"
+#          queue.maxdiskspace="536870912"
+#          queue.lowwatermark="20000"
+#          queue.highwatermark="200000"
+#          queue.discardmark="250000"
+#          queue.type="LinkedList"
+#          queue.discardseverity="4"
+#          queue.saveonshutdown="on"
+#          queue.dequeuebatchsize="4"
+#        )
+#
 #  - name: 20-snoopy
 #    content: |
 #      if ($programname startswith "snoopy") then {
