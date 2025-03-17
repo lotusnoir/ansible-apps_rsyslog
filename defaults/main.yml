@@ -31,8 +31,6 @@ rsyslog_rules_conf: |
   mail.err                /var/log/mail.err
   *.emerg                 :omusrmsg:*
 
-# Forward configuration
-rsyslog_d_forward: []
 # Create specific log file
 rsyslog_d_custom: []
 #  - name: 10-ignore-systemd-gpg.conf
