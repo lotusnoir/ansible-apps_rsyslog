@@ -25,7 +25,7 @@ Install and configure rsyslog log forwarder
 
 ## Requirements
 
-['lotusnoir.repo-epel']
+['lotusnoir.system_repo_epel']
 
 ## Role variables
 

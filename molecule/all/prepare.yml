@@ -22,4 +22,3 @@
 
   roles:
     - role: lotusnoir.system_repo_epel
-      when: ansible_distribution == 'RedHat'
