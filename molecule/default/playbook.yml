@@ -7,4 +7,9 @@
   tasks:
     - name: Include role
       ansible.builtin.include_role:
+        name: lotusnoir.system_repo_epel
+      when: ansible_distribution == 'RedHat'
+
+    - name: Include role
+      ansible.builtin.include_role:
         name: ansible-apps_rsyslog
