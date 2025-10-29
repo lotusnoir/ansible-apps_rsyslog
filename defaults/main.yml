@@ -18,8 +18,8 @@ rsyslog_global_conf: |
   $FileCreateMode 0640
   $DirCreateMode 2755
   $Umask 0022
-  $PrivDropToUser root
-  $PrivDropToGroup adm
+  #$PrivDropToUser root
+  #$PrivDropToGroup adm
   $WorkDirectory {{ rsyslog_working_dir }}
   $IncludeConfig /etc/rsyslog.d/*.conf
 
