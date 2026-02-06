@@ -17,7 +17,7 @@
         gpgcheck: false
         gpgkey: "https://rpms.adiscon.com/RPM-GPG-KEY-Adiscon"
         protect: true
-      when: ansible_distribution == 'RedHat'
+      when: ansible_facts.distribution == 'RedHat'
 
     - name: "REDHAT: Install rsyslog package"
       ansible.builtin.package:
