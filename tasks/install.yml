@@ -12,7 +12,7 @@
       ansible.builtin.yum_repository:
         name: rsyslog
         description: "Adiscon RHEL-$releasever - local packages for $basearch"
-        baseurl: "http://rpms.adiscon.com/v8-stable/rhel-$releasever/$basearch"
+        baseurl: "http://rpms.adiscon.com/v8-stable-daily/rhel-$releasever/$basearch"
         enabled: true
         gpgcheck: false
         gpgkey: "https://rpms.adiscon.com/RPM-GPG-KEY-Adiscon"
